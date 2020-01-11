@@ -8,9 +8,14 @@ namespace mvp.identity.Extensions
 {
     public static class ConfigurationExtensions
     {
-        public static string LoggingPath(this IConfiguration config)
+        public static string LogsMinLevel(this IConfiguration config)
         {
-            return config.GetValue<string>("Logging:Path");
+            return config.GetValue<string>("Logs:MinLevel");
+        }
+
+        public static string LogsPath(this IConfiguration config)
+        {
+            return config.GetValue<string>("Logs:Path");
         }
 
         public static string GoogleClientId(this IConfiguration config)

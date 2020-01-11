@@ -10,7 +10,6 @@ using mvp.identity.Extensions;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
-using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.IO;
 using System.Linq;
@@ -21,30 +20,26 @@ namespace mvp.identity
     {
         public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.json")
             .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-            .AddEnvironmentVariables()
             .Build();
 
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.File(
                     formatter: new RenderedCompactJsonFormatter(),
-                    path: Configuration.LoggingPath(),
-                    restrictedToMinimumLevel: LogEventLevel.Information,
+                    path: Configuration.LogsPath(),
+                    restrictedToMinimumLevel: Configuration.LogsMinLevel() == "Info" ? LogEventLevel.Information : LogEventLevel.Debug,
                     fileSizeLimitBytes: 1_000_000,
-                    buffered: true,
                     shared: true,
                     flushToDiskInterval: TimeSpan.FromSeconds(10),
                     rollOnFileSizeLimit: true
                 )
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate)
                 .CreateLogger();
 
             try
