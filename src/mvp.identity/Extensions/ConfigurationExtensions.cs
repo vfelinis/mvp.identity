@@ -8,6 +8,11 @@ namespace mvp.identity.Extensions
 {
     public static class ConfigurationExtensions
     {
+        public static int KestrelPort(this IConfiguration config)
+        {
+            return config.GetValue<int>("KestrelPort");
+        }
+
         public static string LogsMinLevel(this IConfiguration config)
         {
             return config.GetValue<string>("Logs:MinLevel");

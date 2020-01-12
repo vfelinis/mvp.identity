@@ -80,7 +80,10 @@ namespace mvp.identity
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>().UseKestrel(options =>
+                    {
+                        options.ListenAnyIP(Configuration.KestrelPort());
+                    });
                     webBuilder.UseSerilog();
                 });
     }
