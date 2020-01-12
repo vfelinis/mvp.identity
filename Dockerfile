@@ -3,16 +3,10 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-#COPY *.sln .
-#COPY src/mvp.identity/*.csproj ./mvp.identity/
-#RUN dotnet restore
-#COPY src/mvp.identity/. ./mvp.identity/
-#WORKDIR /dist/mvp.identity
-#RUN dotnet publish -c Release -o out /app/publish
-
 COPY ["src/mvp.identity/mvp.identity.csproj", "src/mvp.identity/"]
 RUN dotnet restore "src/mvp.identity/mvp.identity.csproj"
 COPY . .
