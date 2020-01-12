@@ -26,4 +26,8 @@
   <ItemGroup>
     <Folder Include="Helpers\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Dockerfile" Link="Dockerfile" />
+  </ItemGroup>
 </Project>
