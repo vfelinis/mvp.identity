@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using mvp.identity.Data.Models;
 using mvp.identity.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Security.Cryptography.X509Certificates;
 
 namespace mvp.identity
 {
@@ -70,8 +71,7 @@ namespace mvp.identity
                 .AddInMemoryClients(IdentityServerConfig.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
 
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -96,7 +96,7 @@ namespace mvp.identity
                 app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

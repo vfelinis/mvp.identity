@@ -13,6 +13,8 @@ using Serilog.Formatting.Compact;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace mvp.identity
 {
@@ -80,10 +82,16 @@ namespace mvp.identity
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>().UseKestrel(options =>
+                    webBuilder.ConfigureKestrel(serverOptions =>
                     {
-                        options.ListenAnyIP(Configuration.KestrelPort());
+                        serverOptions.Listen(IPAddress.Loopback, Configuration.KestrelHttpPort());
+                        serverOptions.Listen(IPAddress.Loopback, Configuration.KestrelHttpsPort(),
+                            listenOptions =>
+                            {
+                                listenOptions.UseHttps(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
+                            });
                     });
+                    webBuilder.UseStartup<Startup>();
                     webBuilder.UseSerilog();
                 });
     }

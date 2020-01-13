@@ -8,9 +8,24 @@ namespace mvp.identity.Extensions
 {
     public static class ConfigurationExtensions
     {
-        public static int KestrelPort(this IConfiguration config)
+        public static int KestrelHttpPort(this IConfiguration config)
         {
-            return config.GetValue<int>("KestrelPort");
+            return config.GetValue<int>("KestrelHttpPort");
+        }
+
+        public static int KestrelHttpsPort(this IConfiguration config)
+        {
+            return config.GetValue<int>("KestrelHttpsPort");
+        }
+
+        public static string CertificatePath(this IConfiguration config)
+        {
+            return config.GetValue<string>("Certificate:Path");
+        }
+
+        public static string CertificatePassword(this IConfiguration config)
+        {
+            return config.GetValue<string>("Certificate:Password");
         }
 
         public static string LogsMinLevel(this IConfiguration config)
