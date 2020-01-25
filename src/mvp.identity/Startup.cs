@@ -95,11 +95,11 @@ namespace mvp.identity
             }
             else
             {
-                app.UseHsts();
+                //app.UseHsts();
             }
 
-            var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status307TemporaryRedirect, Configuration.KestrelHttpsPort());
-            app.UseRewriter(options);
+            //var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status307TemporaryRedirect, Configuration.KestrelHttpsPort());
+            //app.UseRewriter(options);
             app.UseStaticFiles();
 
             app.UseRouting();
