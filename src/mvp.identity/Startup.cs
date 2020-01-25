@@ -14,6 +14,8 @@ using mvp.identity.Data.Models;
 using mvp.identity.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Http;
 
 namespace mvp.identity
 {
@@ -96,7 +98,8 @@ namespace mvp.identity
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status307TemporaryRedirect, Configuration.KestrelHttpsPort());
+            app.UseRewriter(options);
             app.UseStaticFiles();
 
             app.UseRouting();
