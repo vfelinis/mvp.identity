@@ -73,8 +73,7 @@ namespace mvp.identity
                 .AddInMemoryClients(IdentityServerConfig.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
 
-            //builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
-            builder.AddDeveloperSigningCredential();
+            builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -96,11 +95,10 @@ namespace mvp.identity
             }
             else
             {
-                //app.UseHsts();
+                app.UseHsts();
             }
 
-            //var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status307TemporaryRedirect, Configuration.KestrelHttpsPort());
-            //app.UseRewriter(options);
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
