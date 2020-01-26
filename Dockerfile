@@ -11,6 +11,7 @@ COPY ["src/mvp.identity/mvp.identity.csproj", "src/mvp.identity/"]
 RUN dotnet restore "src/mvp.identity/mvp.identity.csproj"
 COPY . .
 WORKDIR "/src/src/mvp.identity"
+COPY ["mvp-identity.pfx", "/root/.aspnet/https"]
 RUN dotnet build "mvp.identity.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "mvp.identity.csproj" -c Release -o /app/publish
