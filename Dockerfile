@@ -8,7 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["src/mvp.identity/mvp.identity.csproj", "src/mvp.identity/"]
-COPY ["src/mvp.identity/mvp-identity.pfx", "/root/.aspnet/https"]
 RUN dotnet restore "src/mvp.identity/mvp.identity.csproj"
 COPY . .
 WORKDIR "/src/src/mvp.identity"
