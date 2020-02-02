@@ -83,15 +83,15 @@ namespace mvp.identity
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    //webBuilder.ConfigureKestrel(serverOptions =>
-                    //{
-                    //    serverOptions.Listen(IPAddress.Loopback, Configuration.KestrelHttpPort());
-                    //    serverOptions.Listen(IPAddress.Loopback, Configuration.KestrelHttpsPort(),
-                    //        listenOptions =>
-                    //        {
-                    //            listenOptions.UseHttps(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
-                    //        });
-                    //});
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.Listen(IPAddress.Loopback, Configuration.KestrelHttpPort());
+                        serverOptions.Listen(IPAddress.Loopback, Configuration.KestrelHttpsPort(),
+                            listenOptions =>
+                            {
+                                listenOptions.UseHttps(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
+                            });
+                    });
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseSerilog();
                 });
