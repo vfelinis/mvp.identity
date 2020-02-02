@@ -73,8 +73,8 @@ namespace mvp.identity
                 .AddInMemoryClients(IdentityServerConfig.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
 
-            //builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
-            builder.AddDeveloperSigningCredential();
+            builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
+            //builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication()
                 .AddGoogle(options =>
