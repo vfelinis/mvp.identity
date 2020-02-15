@@ -92,6 +92,14 @@ namespace mvp.identity
         public void Configure(IApplicationBuilder app)
         {
             //app.UseForwardedHeaders();
+            var fordwardedHeaderOptions = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            };
+            fordwardedHeaderOptions.KnownNetworks.Clear();
+            fordwardedHeaderOptions.KnownProxies.Clear();
+
+            app.UseForwardedHeaders(fordwardedHeaderOptions);
 
             if (Environment.IsDevelopment())
             {
