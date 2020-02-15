@@ -48,6 +48,12 @@ namespace mvp.identity.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return Ok(new { message = "OK" });
+        }
+
         /// <summary>
         /// initiate roundtrip to external authentication provider
         /// </summary>
@@ -93,6 +99,7 @@ namespace mvp.identity.Controllers
         {
             try
             {
+                return Ok(new { message = "OK" });
                 // read external identity from the temporary cookie
                 var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
                 if (result?.Succeeded != true)
@@ -108,7 +115,6 @@ namespace mvp.identity.Controllers
 
                 // lookup our user and external provider info
                 var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
-                return Ok(new { user, provider, providerUserId, claims });
                 if (user == null)
                 {
                     // this might be where you might initiate a custom workflow for user registration
