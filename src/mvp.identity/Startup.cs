@@ -34,13 +34,13 @@ namespace mvp.identity
         {
             services.AddControllersWithViews();
 
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
-            });
+            //services.Configure<ForwardedHeadersOptions>(options =>
+            //{
+            //    options.ForwardedHeaders =
+            //        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            //    options.KnownNetworks.Clear();
+            //    options.KnownProxies.Clear();
+            //});
 
             // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
             services.Configure<IISOptions>(iis =>
@@ -91,7 +91,7 @@ namespace mvp.identity
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseForwardedHeaders();
+            //app.UseForwardedHeaders();
 
             if (Environment.IsDevelopment())
             {
