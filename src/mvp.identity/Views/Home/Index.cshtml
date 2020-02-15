@@ -1,2 +1,5 @@
 <h1>mvp.identity</h1>
-<p>@JsonSerializer.Serialize(ViewContext.HttpContext.Request.Headers)</p>
+@foreach(var header in ViewContext.HttpContext.Request.Headers)
+{
+    <div>@header.Key: @header.Value</div>
+}
