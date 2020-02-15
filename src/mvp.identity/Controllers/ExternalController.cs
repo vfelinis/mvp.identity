@@ -48,12 +48,6 @@ namespace mvp.identity.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok(new { message = "OK" });
-        }
-
         /// <summary>
         /// initiate roundtrip to external authentication provider
         /// </summary>
@@ -99,9 +93,9 @@ namespace mvp.identity.Controllers
         {
             try
             {
-                return Ok(new { message = "OK" });
                 // read external identity from the temporary cookie
                 var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+                return Ok(result);
                 if (result?.Succeeded != true)
                 {
                     throw new Exception("External authentication error");
