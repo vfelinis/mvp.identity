@@ -34,13 +34,13 @@ namespace mvp.identity
         {
             services.AddControllersWithViews();
 
-            //services.Configure<ForwardedHeadersOptions>(options =>
-            //{
-            //    options.ForwardedHeaders =
-            //        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            //    options.KnownNetworks.Clear();
-            //    options.KnownProxies.Clear();
-            //});
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
 
             // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
             services.Configure<IISOptions>(iis =>
@@ -84,6 +84,7 @@ namespace mvp.identity
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to http://localhost:5000/signin-google
+                    options.SignInScheme = IdentityConstants.ExternalScheme;
                     options.ClientId = Configuration.GoogleClientId();
                     options.ClientSecret = Configuration.GoogleClientSecret();
                 });
@@ -91,15 +92,7 @@ namespace mvp.identity
 
         public void Configure(IApplicationBuilder app)
         {
-            //app.UseForwardedHeaders();
-            var fordwardedHeaderOptions = new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            };
-            fordwardedHeaderOptions.KnownNetworks.Clear();
-            fordwardedHeaderOptions.KnownProxies.Clear();
-
-            app.UseForwardedHeaders(fordwardedHeaderOptions);
+            app.UseForwardedHeaders();
 
             if (Environment.IsDevelopment())
             {

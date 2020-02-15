@@ -83,8 +83,8 @@ namespace mvp.identity
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
-                    webBuilder.UseIISIntegration();
+                    //webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
+                    //webBuilder.UseIISIntegration();
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseSerilog();
                 });
