@@ -84,7 +84,6 @@ namespace mvp.identity
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to http://localhost:5000/signin-google
-                    options.SignInScheme = IdentityConstants.ExternalScheme;
                     options.ClientId = Configuration.GoogleClientId();
                     options.ClientSecret = Configuration.GoogleClientSecret();
                 });
@@ -94,17 +93,17 @@ namespace mvp.identity
         {
             app.UseForwardedHeaders();
 
-            if (true || Environment.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
             else
             {
-                //app.UseHsts();
+                app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
