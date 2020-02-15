@@ -27,7 +27,7 @@ namespace mvp.identity.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IIdentityServerInteractionService _interaction;
+        private readonly IIdentityServerInteractionService _interaction; 
         private readonly IClientStore _clientStore;
         private readonly IEventService _events;
         private readonly ILogger<ExternalController> _logger;
@@ -108,6 +108,7 @@ namespace mvp.identity.Controllers
 
                 // lookup our user and external provider info
                 var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
+                return Ok(new { user, provider, providerUserId, claims });
                 if (user == null)
                 {
                     // this might be where you might initiate a custom workflow for user registration
