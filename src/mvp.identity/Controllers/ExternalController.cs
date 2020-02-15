@@ -93,9 +93,9 @@ namespace mvp.identity.Controllers
         {
             try
             {
-                return Ok(new { message = "OK" });
-                // read external identity from the temporary cookie
+               // read external identity from the temporary cookie
                 var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+                return Ok(result);
                 if (result?.Succeeded != true)
                 {
                     throw new Exception("External authentication error");
