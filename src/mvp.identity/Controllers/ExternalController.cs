@@ -91,76 +91,68 @@ namespace mvp.identity.Controllers
         [HttpGet]
         public async Task<IActionResult> Callback()
         {
-            try
+            // read external identity from the temporary cookie
+            var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+            if (result?.Succeeded != true)
             {
-               // read external identity from the temporary cookie
-                var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
-                return Ok(result);
-                if (result?.Succeeded != true)
-                {
-                    throw new Exception("External authentication error");
-                }
-
-                if (_logger.IsEnabled(LogLevel.Debug))
-                {
-                    var externalClaims = result.Principal.Claims.Select(c => $"{c.Type}: {c.Value}");
-                    _logger.LogDebug("External claims: {@claims}", externalClaims);
-                }
-
-                // lookup our user and external provider info
-                var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
-                if (user == null)
-                {
-                    // this might be where you might initiate a custom workflow for user registration
-                    // in this sample we don't show how that would be done, as our sample implementation
-                    // simply auto-provisions new external user
-                    user = await AutoProvisionUserAsync(provider, providerUserId, claims);
-                }
-
-                // this allows us to collect any additonal claims or properties
-                // for the specific prtotocols used and store them in the local auth cookie.
-                // this is typically used to store data needed for signout from those protocols.
-                var additionalLocalClaims = new List<Claim>();
-                var localSignInProps = new AuthenticationProperties();
-                ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
-                ProcessLoginCallbackForWsFed(result, additionalLocalClaims, localSignInProps);
-                ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
-
-                // issue authentication cookie for user
-                // we must issue the cookie maually, and can't use the SignInManager because
-                // it doesn't expose an API to issue additional claims from the login workflow
-                var principal = await _signInManager.CreateUserPrincipalAsync(user);
-                additionalLocalClaims.AddRange(principal.Claims);
-                var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? user.Id;
-                await HttpContext.SignInAsync(user.Id, name, provider, localSignInProps, additionalLocalClaims.ToArray());
-
-                // delete temporary cookie used during external authentication
-                await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-                // retrieve return URL
-                var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
-
-                // check if external login is in the context of an OIDC request
-                var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-                await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, name, true, context?.ClientId));
-
-                if (context != null)
-                {
-                    if (await _clientStore.IsPkceClientAsync(context.ClientId))
-                    {
-                        // if the client is PKCE then we assume it's native, so this change in how to
-                        // return the response is for better UX for the end user.
-                        return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
-                    }
-                }
-
-                return Redirect(returnUrl);
+                throw new Exception("External authentication error");
             }
-            catch(Exception ex)
+
+            if (_logger.IsEnabled(LogLevel.Debug))
             {
-                return Ok(ex);
+                var externalClaims = result.Principal.Claims.Select(c => $"{c.Type}: {c.Value}");
+                _logger.LogDebug("External claims: {@claims}", externalClaims);
             }
-            
+
+            // lookup our user and external provider info
+            var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
+            if (user == null)
+            {
+                // this might be where you might initiate a custom workflow for user registration
+                // in this sample we don't show how that would be done, as our sample implementation
+                // simply auto-provisions new external user
+                user = await AutoProvisionUserAsync(provider, providerUserId, claims);
+            }
+
+            // this allows us to collect any additonal claims or properties
+            // for the specific prtotocols used and store them in the local auth cookie.
+            // this is typically used to store data needed for signout from those protocols.
+            var additionalLocalClaims = new List<Claim>();
+            var localSignInProps = new AuthenticationProperties();
+            ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
+            ProcessLoginCallbackForWsFed(result, additionalLocalClaims, localSignInProps);
+            ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
+
+            // issue authentication cookie for user
+            // we must issue the cookie maually, and can't use the SignInManager because
+            // it doesn't expose an API to issue additional claims from the login workflow
+            var principal = await _signInManager.CreateUserPrincipalAsync(user);
+            additionalLocalClaims.AddRange(principal.Claims);
+            var name = principal.FindFirst(JwtClaimTypes.Name)?.Value ?? user.Id;
+            await HttpContext.SignInAsync(user.Id, name, provider, localSignInProps, additionalLocalClaims.ToArray());
+
+            // delete temporary cookie used during external authentication
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            // retrieve return URL
+            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+
+            // check if external login is in the context of an OIDC request
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, name, true, context?.ClientId));
+
+            if (context != null)
+            {
+                if (await _clientStore.IsPkceClientAsync(context.ClientId))
+                {
+                    // if the client is PKCE then we assume it's native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return View("Redirect", new RedirectViewModel { RedirectUrl = returnUrl });
+                }
+            }
+
+            return Redirect(returnUrl);
+
         }
 
         private async Task<IActionResult> ProcessWindowsLoginAsync(string returnUrl)
