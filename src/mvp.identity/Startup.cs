@@ -38,6 +38,8 @@ namespace mvp.identity
             {
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
 
             // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
@@ -89,10 +91,7 @@ namespace mvp.identity
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
+            app.UseForwardedHeaders();
 
             if (Environment.IsDevelopment())
             {
