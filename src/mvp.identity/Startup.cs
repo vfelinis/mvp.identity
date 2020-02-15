@@ -94,17 +94,17 @@ namespace mvp.identity
         {
             app.UseForwardedHeaders();
 
-            if (Environment.IsDevelopment())
+            if (true || Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
             else
             {
-                app.UseHsts();
+                //app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
