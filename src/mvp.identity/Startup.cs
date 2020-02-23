@@ -14,8 +14,7 @@ using mvp.identity.Data.Models;
 using mvp.identity.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace mvp.identity
 {
@@ -72,7 +71,13 @@ namespace mvp.identity
                 })
                 .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
                 .AddInMemoryApiResources(IdentityServerConfig.Apis)
-                .AddInMemoryClients(IdentityServerConfig.Clients)
+                .AddInMemoryClients(
+                    IdentityServerConfig.Clients(
+                        Configuration.IdentityServerSpaClientRedirectUris(),
+                        Configuration.IdentityServerSpaClientPostLogoutRedirectUris(),
+                        Configuration.IdentityServerSpaClientAllowedCorsOrigins()
+                    )
+                )
                 .AddAspNetIdentity<ApplicationUser>();
 
             builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));

@@ -37,5 +37,23 @@ namespace mvp.identity.Extensions
         {
             return config.GetValue<string>("Google:ClientSecret");
         }
+
+        public static List<string> IdentityServerSpaClientRedirectUris(this IConfiguration config)
+        {
+            return config.GetValue<string>("IdentityServer:SpaClient:RedirectUris")?.Split(',')
+                .Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList() ?? new List<string>();
+        }
+
+        public static List<string> IdentityServerSpaClientPostLogoutRedirectUris(this IConfiguration config)
+        {
+            return config.GetValue<string>("IdentityServer:SpaClient:PostLogoutRedirectUris")?.Split(',')
+                .Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList() ?? new List<string>();
+        }
+
+        public static List<string> IdentityServerSpaClientAllowedCorsOrigins(this IConfiguration config)
+        {
+            return config.GetValue<string>("IdentityServer:SpaClient:AllowedCorsOrigins")?.Split(',')
+                .Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList() ?? new List<string>();
+        }
     }
 }
