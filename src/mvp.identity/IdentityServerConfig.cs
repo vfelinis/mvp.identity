@@ -51,9 +51,7 @@ namespace mvp.identity
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "api"
-                    },
-                    AlwaysSendClientClaims = true,
-                    AlwaysIncludeUserClaimsInIdToken = true
+                    }
                 }
             };
     }
