@@ -15,6 +15,8 @@ using mvp.identity.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
+using mvp.identity.Services;
+using IdentityServer4.Services;
 
 namespace mvp.identity
 {
@@ -78,6 +80,7 @@ namespace mvp.identity
                         Configuration.IdentityServerSpaClientAllowedCorsOrigins()
                     )
                 )
+                .AddProfileService<CustomProfileService>()
                 .AddAspNetIdentity<ApplicationUser>();
 
             builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
@@ -92,6 +95,8 @@ namespace mvp.identity
                     options.ClientId = Configuration.GoogleClientId();
                     options.ClientSecret = Configuration.GoogleClientSecret();
                 });
+
+            services.AddTransient<IProfileService, CustomProfileService>();
         }
 
         public void Configure(IApplicationBuilder app)
