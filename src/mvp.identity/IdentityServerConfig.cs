@@ -22,7 +22,8 @@ namespace mvp.identity
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
-                new ApiResource("api", "Around API")
+                new ApiResource("api", "Around API"),
+                new ApiResource("spa", "Around SPA")
             };
 
 
@@ -50,7 +51,8 @@ namespace mvp.identity
                     AllowedScopes = { 
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api"
+                        "api",
+                        "spa"
                     }
                 }
             };
