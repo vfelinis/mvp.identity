@@ -8,14 +8,29 @@ namespace mvp.identity.Extensions
 {
     public static class ConfigurationExtensions
     {
-        public static string CertificatePath(this IConfiguration config)
+        public static bool IsDevelopment(this IConfiguration config)
         {
-            return config.GetValue<string>("Certificate:Path");
+            return config.GetValue<bool>("IsDevelopment");
         }
 
-        public static string CertificatePassword(this IConfiguration config)
+        public static string CertificateDevFile(this IConfiguration config)
         {
-            return config.GetValue<string>("Certificate:Password");
+            return config.GetValue<string>("Certificate:DevFile");
+        }
+
+        public static string CertificateDevPass(this IConfiguration config)
+        {
+            return config.GetValue<string>("Certificate:DevPass");
+        }
+
+        public static string CertificateAcmeFile(this IConfiguration config)
+        {
+            return config.GetValue<string>("Certificate:AcmeFile");
+        }
+
+        public static string CertificateAcmeDomain(this IConfiguration config)
+        {
+            return config.GetValue<string>("Certificate:AcmeDomain");
         }
 
         public static string LogsMinLevel(this IConfiguration config)

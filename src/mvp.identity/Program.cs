@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using mvp.identity.Data;
 using mvp.identity.Extensions;
+using mvp.identity.Helpers;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -79,6 +80,13 @@ namespace mvp.identity
                 {
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseSerilog();
+                    webBuilder.ConfigureKestrel(kestrel =>
+                    {
+                        kestrel.ConfigureHttpsDefaults(https =>
+                        {
+                            https.ServerCertificate = CertificateHelper.CreateCertificate(Configuration);
+                        });
+                    });
                 });
     }
 }

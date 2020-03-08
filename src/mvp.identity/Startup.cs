@@ -17,6 +17,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using mvp.identity.Services;
 using IdentityServer4.Services;
+using mvp.identity.Helpers;
 
 namespace mvp.identity
 {
@@ -83,7 +84,7 @@ namespace mvp.identity
                 .AddProfileService<CustomProfileService>()
                 .AddAspNetIdentity<ApplicationUser>();
 
-            builder.AddSigningCredential(new X509Certificate2(Configuration.CertificatePath(), Configuration.CertificatePassword()));
+            builder.AddSigningCredential(CertificateHelper.CreateCertificate(Configuration));
             //builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication()
