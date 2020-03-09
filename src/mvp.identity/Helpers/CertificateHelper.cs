@@ -23,10 +23,10 @@ namespace mvp.identity.Helpers
                 var jsonBytes = File.ReadAllBytes(configuration.CertificateAcmeFile());
                 using var jsonDoc = JsonDocument.Parse(jsonBytes);
                 var root = jsonDoc.RootElement;
-                var item = root.GetProperty("Certificates").EnumerateArray()
-                    .First(s => s.GetProperty("Domain").GetProperty("Main").GetString() == configuration.CertificateAcmeDomain());
-                var certBase64 = item.GetProperty("Certificate").GetString();
-                var keyBase64 = item.GetProperty("Key").GetString();
+                var item = root.GetProperty("leresolver").GetProperty("Certificates").EnumerateArray()
+                    .First(s => s.GetProperty("domain").GetProperty("main").GetString() == configuration.CertificateAcmeDomain());
+                var certBase64 = item.GetProperty("certificate").GetString();
+                var keyBase64 = item.GetProperty("key").GetString();
                 using var publicKey = new X509Certificate2(Convert.FromBase64String(certBase64));
                 var privateKey = UTF8Encoding.UTF8.GetString(Convert.FromBase64String(keyBase64));
                 var privateKeyBlocks = privateKey.Split("-", StringSplitOptions.RemoveEmptyEntries);
