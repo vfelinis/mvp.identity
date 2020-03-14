@@ -53,6 +53,16 @@ namespace mvp.identity.Extensions
             return config.GetValue<string>("Google:ClientSecret");
         }
 
+        public static string YandexClientId(this IConfiguration config)
+        {
+            return config.GetValue<string>("Yandex:ClientId");
+        }
+
+        public static string YandexClientSecret(this IConfiguration config)
+        {
+            return config.GetValue<string>("Yandex:ClientSecret");
+        }
+
         public static List<string> IdentityServerSpaClientRedirectUris(this IConfiguration config)
         {
             return config.GetValue<string>("IdentityServer:SpaClient:RedirectUris")?.Split(',')

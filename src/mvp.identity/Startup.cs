@@ -95,6 +95,12 @@ namespace mvp.identity
                     // set the redirect URI to http://localhost:5000/signin-google
                     options.ClientId = Configuration.GoogleClientId();
                     options.ClientSecret = Configuration.GoogleClientSecret();
+                })
+                .AddYandex(options =>
+                {
+                    options.CallbackPath = "/signin-yandex";
+                    options.ClientId = Configuration.YandexClientId();
+                    options.ClientSecret = Configuration.YandexClientSecret();
                 });
 
             services.AddTransient<IProfileService, CustomProfileService>();

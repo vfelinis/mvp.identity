@@ -118,7 +118,8 @@ namespace mvp.identity.Controllers
             // this allows us to collect any additonal claims or properties
             // for the specific prtotocols used and store them in the local auth cookie.
             // this is typically used to store data needed for signout from those protocols.
-            var additionalLocalClaims = new List<Claim> { new Claim(JwtClaimTypes.Id, providerUserId) };
+
+            var additionalLocalClaims = new List<Claim> { new Claim(JwtClaimTypes.Id, $"{provider}-{providerUserId}") };
             var localSignInProps = new AuthenticationProperties();
             ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
             ProcessLoginCallbackForWsFed(result, additionalLocalClaims, localSignInProps);
